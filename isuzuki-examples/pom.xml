@@ -23,19 +23,44 @@
             <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.isuziki</groupId>
+            <artifactId>isuzuki-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.isuziki</groupId>
+            <artifactId>isuzuki-oss-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.isuziki</groupId>
+            <artifactId>isuzuki-oss-s3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.isuziki</groupId>
+            <artifactId>isuzuki-oss-aliyun</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.isuziki</groupId>
             <artifactId>isuzuki-microservices-traces</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.isuziki</groupId>
             <artifactId>isuzuki-microservices-metrics</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.isuziki</groupId>
             <artifactId>isuzuki-microservices-logs</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

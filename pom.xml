@@ -13,6 +13,15 @@
         <module>isuzuki-microservices-logs</module>
         <module>isuzuki-microservices-traces</module>
         <module>isuzuki-examples</module>
+        <module>isuzuki-datasources</module>
+        <module>isuzuki-utils</module>
+        <module>isuzuki-dingding</module>
+        <module>isuzuki-oss-api</module>
+        <module>isuzuki-oss-s3</module>
+        <module>isuzuki-oss-aliyun</module>
+        <module>isuzuki-oss-support</module>
+        <module>isuzuki-web</module>
+        <module>isuzuki-core</module>
     </modules>
 
     <properties>
@@ -32,6 +41,73 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>2.0.64</version>
+            </dependency>
+
+            <!--<dependency>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
+                <version>8.4.0</version>
+            </dependency>-->
+
+            <dependency>
+                <groupId>com.isuziki</groupId>
+                <artifactId>isuzuki-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.isuziki</groupId>
+                <artifactId>isuzuki-datasources</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.isuziki</groupId>
+                <artifactId>isuzuki-dingding</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.isuziki</groupId>
+                <artifactId>isuzuki-microservices-logs</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.isuziki</groupId>
+                <artifactId>isuzuki-microservices-metrics</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.isuziki</groupId>
+                <artifactId>isuzuki-microservices-traces</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.isuziki</groupId>
+                <artifactId>isuzuki-oss-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.isuziki</groupId>
+                <artifactId>isuzuki-oss-s3</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.isuziki</groupId>
+                <artifactId>isuzuki-oss-aliyun</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.isuziki</groupId>
+                <artifactId>isuzuki-utils</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.isuziki</groupId>
+                <artifactId>isuzuki-web</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -57,7 +133,7 @@
                 <plugin>
                     <groupId>io.github.git-commit-id</groupId>
                     <artifactId>git-commit-id-maven-plugin</artifactId>
-                    <version>4.9.9</version>
+                    <version>9.2.0</version>
                     <executions>
                         <execution>
                             <id>get-the-git-infos</id>
@@ -75,6 +151,7 @@
                         <dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
                         <!-- 禁止在 git describe 失败时终止构建 -->
                         <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                        <runOnlyOnce>true</runOnlyOnce>
                         <gitDescribe>
                             <skip>false</skip>
                             <always>false</always>
