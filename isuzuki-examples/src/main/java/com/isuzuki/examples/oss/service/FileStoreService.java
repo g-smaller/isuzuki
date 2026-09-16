@@ -3,7 +3,7 @@ package com.isuzuki.examples.oss.service;
 import com.isuzuki.oss.api.event.CloudOssUploadEvent;
 
 /**
- * @author : Guo QuanYing (guoquanying@cmvalue.com)
+ * @author : 
  * @date : 2025/11/12
  * @description :
  */

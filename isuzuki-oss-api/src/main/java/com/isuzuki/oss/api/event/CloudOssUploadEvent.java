@@ -7,7 +7,7 @@ public class CloudOssUploadEvent {
     private String uri;
     private String queryString;
     private Map<String, String> headers;
-    private Map<String, Object> body;
+    private String body;
 
     public String getProvider() {
         return provider;
@@ -41,11 +41,11 @@ public class CloudOssUploadEvent {
         this.headers = headers;
     }
 
-    public Map<String, Object> getBody() {
+    public String getBody() {
         return body;
     }
 
-    public void setBody(Map<String, Object> body) {
+    public void setBody(String body) {
         this.body = body;
     }
 

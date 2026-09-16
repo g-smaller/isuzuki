@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author : Guo QuanYing (guoquanying@cmvalue.com)
- * @date : 2021/11/10
+ * @author : 
+ * @date : 
  * @description :
  */
 @RestController
-@RequestMapping(value = "/fs")
+@RequestMapping(value = "/api")
 public class FileUploadPolicyController {
 
     private final FileServiceApplicationService applicationService;
@@ -21,28 +21,28 @@ public class FileUploadPolicyController {
         this.applicationService = applicationService;
     }
 
-    @GetMapping(value = {"/api/private/policy/{appId}", "/api/admin/private/policy/{appId}"})
+    @GetMapping(value = {"/pri-auth/policy/{appId}"})
     public Rs<FileUploadPolicyVo> apiResolvePrivatePolicy(@PathVariable("appId") String appId,
                                                           String filename,
                                                           String bizType) {
         return Rs.success(applicationService.handleOnlinePrivate(appId, filename, bizType));
     }
 
-    @GetMapping("/ga/private/policy/{appId}")
+    @GetMapping("/pub-auth/policy/{appId}")
     public Rs<FileUploadPolicyVo> gaResolvePrivatePolicy(@PathVariable("appId") String appId,
                                                          String filename,
                                                          String bizType) {
         return Rs.success(applicationService.handleGuestPrivate(appId, filename, bizType));
     }
 
-    @GetMapping(value = {"/api/public/policy/{appId}", "/api/admin/public/policy/{appId}"})
+    @GetMapping(value = {"/pri-none/policy/{appId}"})
     public Rs<FileUploadPolicyVo> apiResolvePublicPolicy(@PathVariable("appId") String appId,
                                                          String filename,
                                                          String bizType) {
         return Rs.success(applicationService.handleOnlinePublic(appId, filename, bizType));
     }
 
-    @GetMapping("/ga/public/policy/{appId}")
+    @GetMapping("/pub-none/policy/{appId}")
     public Rs<FileUploadPolicyVo> gaResolvePublicPolicy(@PathVariable("appId") String appId,
                                                         String filename,
                                                         String bizType) {

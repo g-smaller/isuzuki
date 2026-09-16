@@ -10,12 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestClient;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.spec.X509EncodedKeySpec;
+
 
 public class AliYunCloudOssUploadHandler implements CloudOssUploadHandler {
     private Logger logger = LoggerFactory.getLogger(AliYunCloudOssUploadHandler.class);
@@ -38,7 +39,7 @@ public class AliYunCloudOssUploadHandler implements CloudOssUploadHandler {
         String md5 = event.getHeader("content-md5");
         String requestId = event.getHeader("x-oss-request-id");
 
-        String callbackBodyJson = Jsons.toString(event.getBody());
+        String callbackBodyJson = event.getBody();
         boolean success = preHandle(event, callbackBodyJson);
         if (!success) {
             logger.warn("[AliYun] {} OSS callback Failure, body: {}, header: {}", requestId, callbackBodyJson, Jsons.toString(event.getHeaders()));
@@ -77,36 +78,33 @@ public class AliYunCloudOssUploadHandler implements CloudOssUploadHandler {
     }
 
     private boolean preHandle(CloudOssUploadEvent event, String callbackBodyJson) {
-        String authorization = event.getHeader("Authorization");
-        String pubKeyUrl = event.getHeader("x-oss-pub-key-url");
-        byte[] authorizationByte = BinaryUtil.fromBase64String(authorization);
-        byte[] pubKeyUrlByte = BinaryUtil.fromBase64String(pubKeyUrl);
-        String pubKeyAddr = new String(pubKeyUrlByte);
-        if (!pubKeyAddr.startsWith(ALI_CDN_HTTPS) && !pubKeyAddr.startsWith(ALI_CDN_HTTP)) {
+        String authorization_base64 = event.getHeader("authorization");
+        if (StringUtils.isBlank(authorization_base64)) {
+            authorization_base64 = event.getHeader("Authorization");
+        }
+        String pub_key_url_base64 = event.getHeader("x-oss-pub-key-url");
+        byte[] authorization_byte = BinaryUtil.fromBase64String(authorization_base64);
+        byte[] pub_key_url_byte = BinaryUtil.fromBase64String(pub_key_url_base64);
+        String pub_key_url = new String(pub_key_url_byte);
+        if (!pub_key_url.startsWith(ALI_CDN_HTTPS) && !pub_key_url.startsWith(ALI_CDN_HTTP)) {
             logger.info("[AliYun] pub key addr must be oss address");
             return false;
         }
-        String publicKey = getPublicKey(pubKeyAddr);
+        String publicKey = getPublicKey(pub_key_url);
         publicKey = publicKey.replace("-----BEGIN PUBLIC KEY-----", "");
         publicKey = publicKey.replace("-----END PUBLIC KEY-----", "");
         String queryString = event.getQueryString();
         String uri = event.getUri();
-        String decodeUri = null;
-        try {
-            decodeUri = URLDecoder.decode(uri, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            logger.info("[AliYun] uri decode error", e);
-            throw new RuntimeException(e);
-        }
-        String authStr = decodeUri;
+        String authStr = URLDecoder.decode(uri, StandardCharsets.UTF_8);
         if (StringUtils.isNotBlank(queryString)) {
             authStr += "?" + queryString;
         }
         authStr += "\n" + callbackBodyJson;
-        return doCheck(authStr, authorizationByte, publicKey);
+        logger.info("AliYun Callback Verify: {}, {}, {}", authStr, authorization_base64, publicKey);
+        return verify(authStr, authorization_byte, publicKey);
     }
 
-    private boolean doCheck(String content, byte[] sign, String publicKey) {
+    private boolean verify(String content, byte[] sign, String publicKey) {
         try {
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             byte[] encodedKey = BinaryUtil.fromBase64String(publicKey);

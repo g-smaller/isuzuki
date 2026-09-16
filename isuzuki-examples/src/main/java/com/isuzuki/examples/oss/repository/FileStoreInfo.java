@@ -1,7 +1,7 @@
 package com.isuzuki.examples.oss.repository;
 
 /**
- * @author : Guo QuanYing (guoquanying@cmvalue.com)
+ * @author : 
  * @date : 2025/11/12
  * @description :
  */
@@ -50,7 +50,6 @@ public class FileStoreInfo {
      * 数据记录状态，1：有效记录，0：无效记录；默认为 1
      */
     private Integer recordStatus = 1;
-    private String orgCode = "CMV";
 
     public Integer getId() {
         return id;
@@ -234,13 +233,5 @@ public class FileStoreInfo {
 
     public void setRecordStatus(Integer recordStatus) {
         this.recordStatus = recordStatus;
-    }
-
-    public String getOrgCode() {
-        return orgCode;
-    }
-
-    public void setOrgCode(String orgCode) {
-        this.orgCode = orgCode;
     }
 }

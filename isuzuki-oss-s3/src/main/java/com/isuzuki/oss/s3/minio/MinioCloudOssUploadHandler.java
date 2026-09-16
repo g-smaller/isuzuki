@@ -17,7 +17,7 @@ public class MinioCloudOssUploadHandler implements CloudOssUploadHandler {
 
     @Override
     public CloudOssUploadObjectResult handle(CloudOssUploadEvent event) {
-        String bodyJson = Jsons.toString(event.getBody());
+        String bodyJson = event.getBody();
         logger.info("Minio Webhook: {} | {}", Jsons.toString(event.getHeaders()), bodyJson);
 
         MinioWebhookEvent s3Event = Jsons.parseObject(bodyJson, MinioWebhookEvent.class);

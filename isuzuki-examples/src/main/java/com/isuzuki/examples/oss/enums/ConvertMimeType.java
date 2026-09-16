@@ -1,7 +1,7 @@
 package com.isuzuki.examples.oss.enums;
 
 /**
- * @author : Guo QuanYing (guoquanying@cmvalue.com)
+ * @author : 
  * @date : 2024/12/20
  * @description :
  */

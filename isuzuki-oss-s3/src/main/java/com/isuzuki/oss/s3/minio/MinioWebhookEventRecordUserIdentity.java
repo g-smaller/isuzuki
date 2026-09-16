@@ -1,7 +1,7 @@
 package com.isuzuki.oss.s3.minio;
 
 /**
- * @author : Guo QuanYing (guoquanying@cmvalue.com)
+ * @author : 
  * @date : 2025/11/12
  * @description :
  */

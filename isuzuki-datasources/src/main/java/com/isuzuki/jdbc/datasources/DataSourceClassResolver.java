@@ -5,7 +5,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import java.lang.reflect.Proxy;
 
 /**
- * @author : Guo QuanYing (guoquanying@cmvalue.com)
+ * @author : 
  * @date : 2023/9/15
  * @description :
  */

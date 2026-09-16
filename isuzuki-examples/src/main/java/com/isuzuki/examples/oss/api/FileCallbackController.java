@@ -3,18 +3,22 @@ package com.isuzuki.examples.oss.api;
 import com.isuzuki.examples.oss.service.FileStoreService;
 import com.isuzuki.oss.api.event.CloudOssUploadEvent;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author : Guo QuanYing (guoquanying@cmvalue.com)
+ * @author : 
  * @date : 2025/11/12
  * @description :
  */
@@ -22,15 +26,16 @@ import java.util.Map;
 @RequestMapping(value = "/fs/s3")
 public class FileCallbackController {
 
+    private Logger logger = LoggerFactory.getLogger(FileCallbackController.class);
+
     @Autowired
     private FileStoreService fileStoreService;
 
     @PostMapping(value = "/minio/webhook")
     public String minioWebhook(
-            HttpServletRequest request,
-            @RequestBody Map<String, Object> data) {
+            HttpServletRequest request) throws IOException{
 
-        CloudOssUploadEvent event = createEvent(request, data);
+        CloudOssUploadEvent event = createEvent(request);
         event.setProvider("MinIO");
 
         fileStoreService.store(event);
@@ -38,19 +43,21 @@ public class FileCallbackController {
     }
 
     @PostMapping(value = "/aliyun/webhook")
-    public String aliyunWebhook(
-            HttpServletRequest request,
-            @RequestBody Map<String, Object> data) {
+    public Map<String, String> aliyunWebhook(HttpServletRequest request) throws IOException{
 
-        CloudOssUploadEvent event = createEvent(request, data);
+        CloudOssUploadEvent event = createEvent(request);
         event.setProvider("AliYun");
 
-        fileStoreService.store(event);
-        return "SUCCESS!";
+        try {
+            fileStoreService.store(event);
+            return Collections.singletonMap("Status", "OK");
+        }catch (Exception e){
+            logger.error("AliYun Webhook Error!", e);
+            return Collections.singletonMap("Status", "verdify not ok");
+        }
     }
 
-    private CloudOssUploadEvent createEvent(HttpServletRequest request,
-                                            Map<String, Object> data) {
+    private CloudOssUploadEvent createEvent(HttpServletRequest request) throws IOException {
         Map<String, String> headers = new HashMap<>();
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
@@ -60,9 +67,29 @@ public class FileCallbackController {
 
         CloudOssUploadEvent event = new CloudOssUploadEvent();
         event.setHeaders(headers);
-        event.setBody(data);
+        event.setBody(readBody(request.getInputStream(), request.getContentLength()));
         event.setQueryString(request.getQueryString());
         event.setUri(request.getRequestURI());
         return event;
+    }
+
+    public String readBody(InputStream is, int contentLen) {
+        if (contentLen > 0) {
+            int readLen = 0;
+            int readLengthThisTime = 0;
+            byte[] message = new byte[contentLen];
+            try {
+                while (readLen != contentLen) {
+                    readLengthThisTime = is.read(message, readLen, contentLen - readLen);
+                    if (readLengthThisTime == -1) {// Should not happen.
+                        break;
+                    }
+                    readLen += readLengthThisTime;
+                }
+                return new String(message);
+            } catch (IOException e) {
+            }
+        }
+        return "";
     }
 }
