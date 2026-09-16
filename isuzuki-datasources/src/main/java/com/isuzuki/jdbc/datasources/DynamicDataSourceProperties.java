@@ -10,9 +10,9 @@ import java.util.Map;
  * @description :
  */
 public class DynamicDataSourceProperties {
-    public static final String PREFIX = "isuzuki.jdbc.datasource";
+    public static final String PREFIX = "isuzuki.datasources";
 
-    private org.springframework.boot.jdbc.autoconfigure.DataSourceProperties master;
+    private DataSourceProperties master;
 
     private Map<String, DataSourceProperties> slave;
 

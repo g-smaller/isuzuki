@@ -22,6 +22,7 @@
         <module>isuzuki-oss-support</module>
         <module>isuzuki-web</module>
         <module>isuzuki-core</module>
+        <module>isuzuki-http-apilog</module>
     </modules>
 
     <properties>
@@ -67,6 +68,11 @@
             <dependency>
                 <groupId>com.isuziki</groupId>
                 <artifactId>isuzuki-dingding</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.isuziki</groupId>
+                <artifactId>isuzuki-http-apilog</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

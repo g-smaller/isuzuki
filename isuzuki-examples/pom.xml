@@ -62,6 +62,10 @@
             <groupId>com.isuziki</groupId>
             <artifactId>isuzuki-microservices-logs</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.isuziki</groupId>
+            <artifactId>isuzuki-http-apilog</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
