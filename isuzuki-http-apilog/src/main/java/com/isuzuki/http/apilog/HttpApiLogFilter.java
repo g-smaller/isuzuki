@@ -12,17 +12,23 @@ import java.util.List;
 
 public class HttpApiLogFilter  extends OncePerRequestFilter {
 
+    private final HttpApiLogProperties  httpApiLogProperties;
+    private final HttpApiLogTraceContext  httpApiLogTraceContext;
     private final HttpApiLogBuilderFactory builderFactory;
     private final HttpApiLogHandler httpApiLogHandler;
     private final HttpServletRequestWrapperFactory requestWrapperFactory;
     private final HttpServletResponseWrapperFactory responseWrapperFactory;
     private final List<HttpApiLogCustomizer> customizers;
 
-    public HttpApiLogFilter(HttpApiLogBuilderFactory builderFactory,
+    public HttpApiLogFilter(HttpApiLogProperties  httpApiLogProperties,
+                            HttpApiLogTraceContext  httpApiLogTraceContext,
+                            HttpApiLogBuilderFactory builderFactory,
                             HttpApiLogHandler httpApiLogHandler,
                             HttpServletRequestWrapperFactory requestWrapperFactory,
                             HttpServletResponseWrapperFactory responseWrapperFactory,
                             List<HttpApiLogCustomizer> customizers) {
+        this.httpApiLogProperties = httpApiLogProperties;
+        this.httpApiLogTraceContext = httpApiLogTraceContext;
         this.builderFactory = builderFactory;
         this.httpApiLogHandler = httpApiLogHandler;
         this.requestWrapperFactory = requestWrapperFactory;
@@ -35,6 +41,15 @@ public class HttpApiLogFilter  extends OncePerRequestFilter {
         HttpServletRequest httpServletRequest = requestWrapperFactory.create(request);
         HttpServletResponse httpServletResponse = responseWrapperFactory.create(response);
         HttpApiLogBuilder builder = builderFactory.create(httpServletRequest);
+
+        String traceId = builder.getTraceId();
+        if (traceId == null || traceId.isEmpty()) {
+            traceId = httpApiLogTraceContext.getTraceId();
+        }
+
+        if (httpApiLogProperties.isAddTraceIdResponseHeader()) {
+            response.addHeader(httpApiLogProperties.getTraceIdResponseHeaderName(), traceId);
+        }
 
         HttpApiLogCollector collector = new HttpApiLogCollector(httpServletRequest, httpServletResponse, customizers);
 

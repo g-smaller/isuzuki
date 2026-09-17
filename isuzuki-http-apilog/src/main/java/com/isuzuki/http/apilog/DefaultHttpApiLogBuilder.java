@@ -19,6 +19,11 @@ public class DefaultHttpApiLogBuilder implements HttpApiLogBuilder {
     }
 
     @Override
+    public String getTraceId() {
+        return apiLog.getTraceId();
+    }
+
+    @Override
     public HttpApiLogBuilder requestTimeFormat(String requestTimeFormat) {
         apiLog.setRequestTimeFormat(requestTimeFormat);
         return this;
@@ -32,8 +37,8 @@ public class DefaultHttpApiLogBuilder implements HttpApiLogBuilder {
     }
 
     @Override
-    public HttpApiLogBuilder requestId(String requestId) {
-        apiLog.setRequestId(requestId);
+    public HttpApiLogBuilder traceId(String traceId) {
+        apiLog.setTraceId(traceId);
         return this;
     }
 

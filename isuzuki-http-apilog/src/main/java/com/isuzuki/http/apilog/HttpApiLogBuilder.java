@@ -4,11 +4,13 @@ import java.util.Map;
 
 public interface HttpApiLogBuilder {
 
+    String getTraceId();
+
     HttpApiLogBuilder requestTimeFormat(String requestTimeFormat);
 
     HttpApiLogBuilder requestTime(Long requestTime);
 
-    HttpApiLogBuilder requestId(String requestId);
+    HttpApiLogBuilder traceId(String traceId);
 
     HttpApiLogBuilder clientIp(String clientIp);
 

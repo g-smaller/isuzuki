@@ -3,7 +3,7 @@ package com.isuzuki.http.apilog;
 import java.util.Map;
 
 public interface HttpApiLog {
-    String getRequestId();
+    String getTraceId();
 
     Long getRequestTime();
 

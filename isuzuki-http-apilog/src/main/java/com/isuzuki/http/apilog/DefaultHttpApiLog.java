@@ -3,7 +3,7 @@ package com.isuzuki.http.apilog;
 import java.util.Map;
 
 public class DefaultHttpApiLog implements HttpApiLog {
-    private String requestId;
+    private String traceId;
     private String requestTimeFormat;
     private Long requestTime;
     private String clientIp;
@@ -30,8 +30,8 @@ public class DefaultHttpApiLog implements HttpApiLog {
     private String elapsedTimeFormat;
 
     @Override
-    public String getRequestId() {
-        return requestId;
+    public String getTraceId() {
+        return traceId;
     }
 
     @Override
@@ -154,8 +154,8 @@ public class DefaultHttpApiLog implements HttpApiLog {
         return  elapsedTimeFormat;
     }
 
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
+    public void setTraceId(String traceId) {
+        this.traceId = traceId;
     }
 
     public void setRequestTimeFormat(String requestTimeFormat) {

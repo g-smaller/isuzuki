@@ -53,8 +53,8 @@ public class HttpApiLogModuleAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public HttpApiLogBuilderFactory httpApiLogBuilderFactory(TraceContext traceContext) {
-        return new DefaultHttpApiLogBuilderFactory(traceContext);
+    public HttpApiLogBuilderFactory httpApiLogBuilderFactory() {
+        return new DefaultHttpApiLogBuilderFactory();
     }
 
     @Bean
@@ -65,12 +65,20 @@ public class HttpApiLogModuleAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public HttpApiLogFilter httpApiLogFilter(HttpApiLogBuilderFactory builderFactory,
+    public HttpApiLogTraceContext httpApiLogTraceContext() {
+        return new DefaultHttpApiLogTraceContext();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public HttpApiLogFilter httpApiLogFilter(HttpApiLogProperties  httpApiLogProperties,
+                                             HttpApiLogTraceContext  httpApiLogTraceContext,
+                                             HttpApiLogBuilderFactory builderFactory,
                                              HttpApiLogHandler httpApiLogHandler,
                                              HttpServletRequestWrapperFactory requestWrapperFactory,
                                              HttpServletResponseWrapperFactory responseWrapperFactory,
                                              List<HttpApiLogCustomizer> customizers) {
-        return new HttpApiLogFilter(builderFactory, httpApiLogHandler, requestWrapperFactory, responseWrapperFactory, customizers);
+        return new HttpApiLogFilter(httpApiLogProperties, httpApiLogTraceContext, builderFactory, httpApiLogHandler, requestWrapperFactory, responseWrapperFactory, customizers);
     }
 
 }

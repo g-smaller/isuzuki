@@ -8,8 +8,8 @@ public class HttpApiLogProperties {
     public static final String PREFIX = "isuzuki.http.apilog";
 
     private boolean enabled;
-    private boolean addResponseHeader;
-    private String responseHeaderName = "x-trace-id";
+    private boolean addTraceIdResponseHeader = true;
+    private String traceIdResponseHeaderName = "X-Http-Trace-Id";
 
     public boolean isEnabled() {
         return enabled;
@@ -19,19 +19,19 @@ public class HttpApiLogProperties {
         this.enabled = enabled;
     }
 
-    public boolean isAddResponseHeader() {
-        return addResponseHeader;
+    public boolean isAddTraceIdResponseHeader() {
+        return addTraceIdResponseHeader;
     }
 
-    public void setAddResponseHeader(boolean addResponseHeader) {
-        this.addResponseHeader = addResponseHeader;
+    public void setAddTraceIdResponseHeader(boolean addTraceIdResponseHeader) {
+        this.addTraceIdResponseHeader = addTraceIdResponseHeader;
     }
 
-    public String getResponseHeaderName() {
-        return responseHeaderName;
+    public String getTraceIdResponseHeaderName() {
+        return traceIdResponseHeaderName;
     }
 
-    public void setResponseHeaderName(String responseHeaderName) {
-        this.responseHeaderName = responseHeaderName;
+    public void setTraceIdResponseHeaderName(String traceIdResponseHeaderName) {
+        this.traceIdResponseHeaderName = traceIdResponseHeaderName;
     }
 }
