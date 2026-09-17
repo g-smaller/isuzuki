@@ -85,22 +85,6 @@ public final class LocalTimeUtils {
         return localDateTime.with(CEILLING);
     }
 
-    /*public static LocalDateTime toMonthFirst() {
-        return toMonthFirst(LocalDateTime.now());
-    }
-
-    public static LocalDateTime toMonthFirst(LocalDateTime localDateTime) {
-        return floor(localDateTime.withDayOfMonth(1));
-    }
-
-    public static LocalDateTime toMonthLast() {
-        return toMonthLast(LocalDateTime.now());
-    }
-
-    public static LocalDateTime toMonthLast(LocalDateTime localDateTime) {
-        return ceiling(localDateTime.withDayOfMonth(getMonthMaxDay(localDateTime)));
-    }*/
-
     /**
      * 获取当前时间 - 月起始时间
      * @return
@@ -211,34 +195,6 @@ public final class LocalTimeUtils {
         int first = current - 1;
         int last = WEEK_DAY - current;
         return new Weekly(localDateTime, floor(localDateTime.minusDays(first)), ceiling(localDateTime.plusDays(last)));
-    }
-
-    /**
-     *
-     */
-
-    public static Date floor0() {
-        return toDate(floor());
-    }
-
-    public static Date floor0(Date date) {
-        return toDate(floor(date));
-    }
-
-    public static Date floor0(int day) {
-        return toDate(floor(day));
-    }
-
-    public static Date ceiling0() {
-        return toDate(ceiling());
-    }
-
-    public static Date ceiling0(Date date) {
-        return toDate(ceiling(date));
-    }
-
-    public static Date ceiling0(int day) {
-        return toDate(ceiling(day));
     }
 
 
