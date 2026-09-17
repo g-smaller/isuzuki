@@ -18,8 +18,10 @@ public class HttpRequestHttpApiLogCustomizer implements HttpApiLogCustomizer {
     }
 
     private Object readPayload(HttpServletRequest request) {
-
         String method = request.getMethod();
+        if (HttpMethod.GET.matches(method)) {
+            return "";
+        }
         if (HttpMethod.POST.matches(method)) {
             String contentType = request.getContentType();
             if (MediaType.APPLICATION_JSON_VALUE.contains(contentType)) {

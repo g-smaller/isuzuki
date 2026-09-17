@@ -3,9 +3,39 @@ package com.isuzuki.http.apilog;
 import java.util.Map;
 
 public interface HttpApiLog {
+    String getRequestId();
+
+    Long getRequestTime();
+
+    String getRequestTimeFormat();
+
+    String getClientIp();
+
     String getApiId();
 
     String getApiName();
+
+    String getUri();
+
+    String getMethod();
+
+    String getHost();
+
+    String getQueryString();
+
+    Object getPayload();
+
+    Integer getContentLength();
+
+    String getContentType();
+
+    String getReferer();
+
+    String getUa();
+
+    Map<String, Object> getCookies();
+
+    Map<String, Object> getHeaders();
 
     Map<String, Object> getAnnotations();
 
@@ -15,42 +45,12 @@ public interface HttpApiLog {
 
     HttpAuthenticator getAuthenticator();
 
-    String getClientIp();
-
-    Integer getContentLength();
-
-    String getHost();
-
-    Map<String, Object> getCookies();
-
-    Map<String, Object> getHeaders();
-
-    String getMethod();
-
-    String getReferer();
-
-    Object getPayload();
-
-    String getQueryString();
-
-    String getRequestTimeFormat();
-
-    Long getRequestTime();
-
-    String getServiceName();
-
     Integer getStatusCode();
 
-    String getRequestId();
+    Object getResponse();
 
-    String getResponse();
+    Long getElapsedTime();
 
-    Integer getElapsedMilliSecond();
-
-    String getUa();
-
-    String getUri();
-
-    String getHostname();
+    String getElapsedTimeFormat();
 }
 

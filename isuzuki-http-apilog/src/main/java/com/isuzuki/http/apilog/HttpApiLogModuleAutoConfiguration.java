@@ -3,13 +3,15 @@ package com.isuzuki.http.apilog;
 import com.isuzuki.core.TraceContext;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
 @Configuration
-@ConditionalOnProperty(prefix = "isuzuki.http.apilog", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = HttpApiLogProperties.PREFIX, name = "enabled", havingValue = "true")
+@EnableConfigurationProperties(HttpApiLogProperties.class)
 public class HttpApiLogModuleAutoConfiguration {
 
     @Bean
@@ -20,6 +22,11 @@ public class HttpApiLogModuleAutoConfiguration {
     @Bean
     public MetadataHttpApiLogCustomizer metadataHttpApiLogCustomizer() {
         return new MetadataHttpApiLogCustomizer();
+    }
+
+    @Bean
+    public ExtraHttpApiLogCustomizer extraHttpApiLogCustomizer() {
+        return new ExtraHttpApiLogCustomizer();
     }
 
     @Bean

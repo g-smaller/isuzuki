@@ -16,6 +16,7 @@ public class DefaultHttpApiLogCustomizer implements HttpApiLogCustomizer {
                 .cookies(HttpApiLogUtils.getCookies(request))
                 .method(request.getMethod())
                 .contentLength(request.getContentLength())
+                .contentType(request.getContentType())
                 .ua(HttpApiLogUtils.getUa(request))
                 .referer(HttpApiLogUtils.getReferer(request))
                 .clientIp(HttpApiLogUtils.getRemoteAddr(request));

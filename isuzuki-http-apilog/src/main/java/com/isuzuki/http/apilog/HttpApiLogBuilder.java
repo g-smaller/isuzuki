@@ -10,9 +10,33 @@ public interface HttpApiLogBuilder {
 
     HttpApiLogBuilder requestId(String requestId);
 
+    HttpApiLogBuilder clientIp(String clientIp);
+
     HttpApiLogBuilder apiId(String apiId);
 
     HttpApiLogBuilder apiName(String apiName);
+
+    HttpApiLogBuilder uri(String uri);
+
+    HttpApiLogBuilder method(String method);
+
+    HttpApiLogBuilder host(String host);
+
+    HttpApiLogBuilder queryString(String queryString);
+
+    HttpApiLogBuilder payload(Object payload);
+
+    HttpApiLogBuilder contentLength(int contentLength);
+
+    HttpApiLogBuilder contentType(String contentType);
+
+    HttpApiLogBuilder referer(String referer);
+
+    HttpApiLogBuilder ua(String ua);
+
+    HttpApiLogBuilder cookies(Map<String, Object> cookies);
+
+    HttpApiLogBuilder headers(Map<String, Object> headers);
 
     HttpApiLogBuilder annotations(Map<String, Object> annotations);
 
@@ -28,33 +52,13 @@ public interface HttpApiLogBuilder {
 
     HttpApiLogBuilder authenticator(HttpAuthenticator authenticator);
 
-    HttpApiLogBuilder clientIp(String clientIp);
-
-    HttpApiLogBuilder contentLength(int contentLength);
-
-    HttpApiLogBuilder host(String host);
-
-    HttpApiLogBuilder cookies(Map<String, Object> cookies);
-
-    HttpApiLogBuilder headers(Map<String, Object> headers);
-
-    HttpApiLogBuilder method(String method);
-
-    HttpApiLogBuilder referer(String referer);
-
-    HttpApiLogBuilder payload(Object payload);
-
-    HttpApiLogBuilder queryString(String queryString);
-
     HttpApiLogBuilder statusCode(Integer statusCode);
 
     HttpApiLogBuilder response(Object response);
 
-    HttpApiLogBuilder elapsedMilliSecond(Integer elapsedMilliSecond);
+    HttpApiLogBuilder elapsedTime(Long elapsedTime);
 
-    HttpApiLogBuilder ua(String ua);
-
-    HttpApiLogBuilder uri(String uri);
+    HttpApiLogBuilder elapsedTimeFormat(String elapsedTimeFormat);
 
     HttpApiLog build();
 }
