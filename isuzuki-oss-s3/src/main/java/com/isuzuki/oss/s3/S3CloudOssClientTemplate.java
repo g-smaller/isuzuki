@@ -43,7 +43,7 @@ public class S3CloudOssClientTemplate extends AbstractCloudOssClientTemplate<S3C
                 getBucketProperties(request.getBucketName(), request.getObjectKey());
 
         String bucketName = bucketProperties.getBucketName();
-        String objectKey = CloudOssUtils.appendPath(bucketProperties.getCustomContext(), request.getObjectKey());
+        String objectKey = request.getObjectKey();
 
         software.amazon.awssdk.services.s3.model.PutObjectRequest.Builder requestBuilder = software.amazon.awssdk.services.s3.model.PutObjectRequest.builder()
                 .bucket(bucketName)
@@ -81,21 +81,16 @@ public class S3CloudOssClientTemplate extends AbstractCloudOssClientTemplate<S3C
 
     }
 
-    private String generatePresignedUrl(String bucketName, String objectKey) {
-        return generatePresignedUrl(GetPresignedObjectUrlRequest.builder().bucketName(bucketName).objectKey(objectKey));
-    }
-
     @Override
     public String generatePresignedUrl(GetPresignedObjectUrlRequest request) {
+        String bucketName = request.getBucketName();
+        String objectKey = request.getObjectKey();
 
-        CloudOssObjectKey cloudOssObjectKey = resolveObjectKey(request.getBucketName(), request.getObjectKey());
+        CloudOssBucketProperties bucketProperties = getBucketProperties(bucketName, objectKey);
+        bucketName = bucketProperties.getBucketName();
+        objectKey = resolvePathToObjectKey(bucketProperties, objectKey);
 
-        CloudOssBucketProperties bucketProperties = getBucketProperties(cloudOssObjectKey.getBucketName(), cloudOssObjectKey.getObjectKey());
 
-        String bucketName = bucketProperties.getBucketName();
-        String objectKey = cloudOssObjectKey.getObjectKey();
-
-        String subPath = CloudOssUtils.appendPath(bucketName, objectKey);
         if (bucketProperties.isEnablePresigned()) {
 
             long signatureExpirationMillis = request.getExpireMillsSeconds() <= 0L ? bucketProperties.getUploadExpireTime() : request.getExpireMillsSeconds();
@@ -109,22 +104,9 @@ public class S3CloudOssClientTemplate extends AbstractCloudOssClientTemplate<S3C
                 builder.getObjectRequest(object -> object.bucket(bucket).key(key));
             }).url();
 
-            subPath = signedUrl.getPath() + "?" + signedUrl.getQuery();
+            objectKey = signedUrl.getPath() + "?" + signedUrl.getQuery();
         }
-        return CloudOssUtils.appendFullPath(bucketProperties.getCustomEndpoint(), subPath);
-    }
-
-    public CloudOssObjectKey resolveObjectKey(String bucketName, String objectKey) {
-        String _bucketName = bucketName;
-        String _objectKey = objectKey;
-        if (StringUtils.isBlank(_bucketName)) {
-            CloudOssObjectKey cloudOssObjectKey = CloudOssUtils.parseObjectKey(_objectKey);
-            _bucketName = cloudOssObjectKey.getBucketName();
-            _objectKey = cloudOssObjectKey.getObjectKey();
-        }
-
-        _objectKey = CloudOssUtils.resolveObjectKey(_objectKey);
-        return new CloudOssObjectKey(_bucketName, _objectKey);
+        return handlePreviewUrl(bucketProperties, objectKey);
     }
 
     @Override
@@ -135,8 +117,8 @@ public class S3CloudOssClientTemplate extends AbstractCloudOssClientTemplate<S3C
 
         CloudOssBucketProperties bucketProperties = getBucketPropertiesByAcl(metaValueAcl);
 
-        String url = bucketProperties.getCustomEndpoint() + "/" + bucketProperties.getBucketName();
-        String objectKey = CloudOssUtils.appendPath(bucketProperties.getCustomContext(), request.getObjectKey());
+        String url = CloudOssUtils.appendFullPath(bucketProperties.getCustomEndpoint(), bucketProperties.getBucketName());
+        String objectKey = request.getObjectKey();
 
         int success_action_status = 204;
         GetUploadObjectCredential credential = GetUploadObjectCredential.builder()

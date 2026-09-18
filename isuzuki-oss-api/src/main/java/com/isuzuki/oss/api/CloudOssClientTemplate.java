@@ -19,4 +19,12 @@ public interface CloudOssClientTemplate {
     UploadObjectResponse putObject(PutObjectRequest request) throws Exception;
 
     String generatePresignedUrl(GetPresignedObjectUrlRequest request);
+
+    default String generatePresignedUrl(String bucketName, String objectKey) {
+        return generatePresignedUrl(GetPresignedObjectUrlRequest.builder().bucketName(bucketName).objectKey(objectKey));
+    }
+
+    default String generatePresignedUrl(String objectKey) {
+        return generatePresignedUrl("", objectKey);
+    }
 }

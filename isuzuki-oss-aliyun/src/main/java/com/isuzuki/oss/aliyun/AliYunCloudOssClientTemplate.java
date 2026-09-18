@@ -87,7 +87,7 @@ public class AliYunCloudOssClientTemplate extends AbstractCloudOssClientTemplate
 
         String bucketName = bucketProperties.getBucketName();
 
-        String objectKey = CloudOssUtils.appendPath(bucketProperties.getCustomContext(), request.getObjectKey());
+        String objectKey = request.getObjectKey();
 
         log.info("AliYun PutObject: {}, {}, {}", bucketName, objectKey, objectKey);
 
@@ -195,7 +195,7 @@ public class AliYunCloudOssClientTemplate extends AbstractCloudOssClientTemplate
 
         CloudOssBucketProperties bucketProperties = getBucketPropertiesByAcl(metaValueAcl);
         //
-        String newObjectKey = CloudOssUtils.appendPath(bucketProperties.getCustomContext(), request.getObjectKey());
+        String newObjectKey = request.getObjectKey();
         String bucketName = bucketProperties.getBucketName();
 
         Map<String, String> metas = new HashMap<>();

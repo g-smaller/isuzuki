@@ -2,6 +2,7 @@ package com.isuzuki.oss.api;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,17 +26,13 @@ public abstract class AbstractCloudOssClientTemplate<T> implements CloudOssClien
     }
 
     protected CloudOssBucketProperties getBucketProperties(String bucketName, String objectKey) {
-        if (StringUtils.isNotBlank(objectKey)) {
-            String newObjectKey = CloudOssUtils.handleFirstCharacter(objectKey, "/");
-            List<CloudOssBucketProperties> buckets = cloudOssProperties.getBuckets();
-            for (CloudOssBucketProperties bucket : buckets) {
-                if (StringUtils.isNotBlank(bucket.getCustomContext())) {
-                    if (newObjectKey.startsWith(bucket.getCustomContext())) {
-                        return bucket;
-                    }
-                }
-            }
+        if (StringUtils.isNotBlank(bucketName)) {
+            return getBucketProperties(bucketName);
         }
+        return getBucketPropertiesAndKey(objectKey);
+    }
+
+    protected CloudOssBucketProperties getBucketProperties(String bucketName) {
         if (StringUtils.isNotBlank(bucketName)) {
             List<CloudOssBucketProperties> buckets = cloudOssProperties.getBuckets();
             for (CloudOssBucketProperties bucket : buckets) {
@@ -45,6 +42,36 @@ public abstract class AbstractCloudOssClientTemplate<T> implements CloudOssClien
             }
         }
         return defaultBucketProperties;
+    }
+
+    protected CloudOssBucketProperties getBucketPropertiesAndKey(String objectKey) {
+        if (StringUtils.isNotBlank(objectKey)) {
+            String newObjectKey = CloudOssUtils.handleFirstCharacter(objectKey, "/");
+            List<CloudOssBucketProperties> buckets = cloudOssProperties.getBuckets();
+            for (CloudOssBucketProperties bucket : buckets) {
+                if (bucket.isPathStyleAccessEnabled()) {
+                    if (newObjectKey.startsWith(bucket.getBucketName())) {
+                        return bucket;
+                    }
+                }
+            }
+        }
+        return defaultBucketProperties;
+    }
+
+    protected String resolvePathToObjectKey(CloudOssBucketProperties bucketProperties, String path) {
+        List<String> prefix = new ArrayList<>(4);
+        prefix.add(bucketProperties.getBucketName());
+
+        String key = path;
+        for (String s : prefix) {
+            key = key.replace(s + "/", "");
+        }
+        return key;
+    }
+
+    protected String handlePreviewUrl(CloudOssBucketProperties bucketProperties, String key) {
+        return CloudOssUtils.appendFullPath(bucketProperties.getCustomEndpoint(), key);
     }
 
     protected CloudOssBucketProperties getBucketPropertiesByAcl(String acl) {
@@ -59,6 +86,7 @@ public abstract class AbstractCloudOssClientTemplate<T> implements CloudOssClien
         }
         return defaultBucketProperties;
     }
+
 
 
     public void load() throws Exception {
