@@ -1,5 +1,6 @@
-package com.isuzuki.http.apilog;
+package com.isuzuki.core.logs.http;
 
+import java.util.List;
 import java.util.Map;
 
 public class DefaultHttpApiLog implements HttpApiLog {
@@ -18,12 +19,12 @@ public class DefaultHttpApiLog implements HttpApiLog {
     private String contentType;
     private String referer;
     private String ua;
-    private Map<String, Object> cookies;
+    private List<HttpApiCookie> cookies;
     private Map<String, Object> headers;
     private Map<String, Object> annotations;
     private Map<String, Object> metadata;
     private Map<String, Object> extra;
-    private HttpAuthenticator authenticator;
+    private Map<String, Object> authentication;
     private Integer statusCode;
     private Object response;
     private Long elapsedTime;
@@ -105,7 +106,7 @@ public class DefaultHttpApiLog implements HttpApiLog {
     }
 
     @Override
-    public Map<String, Object> getCookies() {
+    public List<HttpApiCookie> getCookies() {
         return cookies;
     }
 
@@ -130,8 +131,8 @@ public class DefaultHttpApiLog implements HttpApiLog {
     }
 
     @Override
-    public HttpAuthenticator getAuthenticator() {
-        return authenticator;
+    public Map<String, Object> getAuthentication() {
+        return authentication;
     }
 
     @Override
@@ -214,7 +215,7 @@ public class DefaultHttpApiLog implements HttpApiLog {
         this.ua = ua;
     }
 
-    public void setCookies(Map<String, Object> cookies) {
+    public void setCookies(List<HttpApiCookie> cookies) {
         this.cookies = cookies;
     }
 
@@ -234,8 +235,8 @@ public class DefaultHttpApiLog implements HttpApiLog {
         this.extra = extra;
     }
 
-    public void setAuthenticator(HttpAuthenticator authenticator) {
-        this.authenticator = authenticator;
+    public void setAuthentication(Map<String, Object> authentication) {
+        this.authentication = authentication;
     }
 
     public void setStatusCode(Integer statusCode) {

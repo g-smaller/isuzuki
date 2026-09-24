@@ -1,10 +1,11 @@
-package com.isuzuki.http.apilog;
-
-import org.apache.commons.lang3.time.DateFormatUtils;
+package com.isuzuki.core.logs.http;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class DefaultHttpApiLogBuilder implements HttpApiLogBuilder {
 
@@ -14,8 +15,8 @@ public class DefaultHttpApiLogBuilder implements HttpApiLogBuilder {
         // requestTime(System.currentTimeMillis());
     }
 
-    public static DefaultHttpApiLogBuilder builder(){
-        return new  DefaultHttpApiLogBuilder();
+    public static DefaultHttpApiLogBuilder create(){
+        return new DefaultHttpApiLogBuilder();
     }
 
     @Override
@@ -32,7 +33,6 @@ public class DefaultHttpApiLogBuilder implements HttpApiLogBuilder {
     @Override
     public HttpApiLogBuilder requestTime(Long requestTime) {
         apiLog.setRequestTime(requestTime);
-        requestTimeFormat(DateFormatUtils.format(requestTime, "yyyy-MM-dd HH:mm:ss:SSS"));
         return this;
     }
 
@@ -63,6 +63,12 @@ public class DefaultHttpApiLogBuilder implements HttpApiLogBuilder {
     @Override
     public HttpApiLogBuilder uri(String uri) {
         apiLog.setUri(uri);
+        String api = uri;
+        if (uri.length() > 1) {
+            api = uri.replace("/", ".");
+            api = api.substring(1);
+        }
+        apiId(api);
         return this;
     }
 
@@ -97,6 +103,14 @@ public class DefaultHttpApiLogBuilder implements HttpApiLogBuilder {
     }
 
     @Override
+    public HttpApiLogBuilder contentLength(String contentLength) {
+        if (contentLength != null && !contentLength.isBlank()) {
+            contentLength(Integer.parseInt(contentLength));
+        }
+        return this;
+    }
+
+    @Override
     public HttpApiLogBuilder contentType(String contentType) {
         apiLog.setContentType(contentType);
         return this;
@@ -115,8 +129,24 @@ public class DefaultHttpApiLogBuilder implements HttpApiLogBuilder {
     }
 
     @Override
-    public HttpApiLogBuilder cookies(Map<String, Object> cookies) {
-        apiLog.setCookies(cookies);
+    public HttpApiLogBuilder cookies(List<HttpApiCookie> cookies) {
+        if (cookies != null && !cookies.isEmpty()) {
+            if (apiLog.getCookies() == null) {
+                apiLog.setCookies(new ArrayList<>());
+            }
+            apiLog.getCookies().addAll(cookies);
+        }
+        return this;
+    }
+
+    @Override
+    public HttpApiLogBuilder cookies(HttpApiCookie cookie) {
+        if (cookie != null) {
+            if (apiLog.getCookies() == null) {
+                apiLog.setCookies(new ArrayList<>());
+            }
+            apiLog.getCookies().add(cookie);
+        }
         return this;
     }
 
@@ -124,6 +154,15 @@ public class DefaultHttpApiLogBuilder implements HttpApiLogBuilder {
     public HttpApiLogBuilder headers(Map<String, Object> headers) {
         apiLog.setHeaders(headers);
         return this;
+    }
+
+    @Override
+    public HttpApiLogBuilder headers(String key, String value) {
+        if (apiLog.getHeaders() == null) {
+            apiLog.setHeaders(new HashMap<>());
+        }
+        apiLog.getHeaders().put(key, value);
+        return null;
     }
 
     @Override
@@ -187,8 +226,22 @@ public class DefaultHttpApiLogBuilder implements HttpApiLogBuilder {
     }
 
     @Override
-    public HttpApiLogBuilder authenticator(HttpAuthenticator authenticator) {
-        apiLog.setAuthenticator(authenticator);
+    public HttpApiLogBuilder authentication(Map<String, Object> authentication) {
+        if (authentication != null && !authentication.isEmpty()) {
+            if (apiLog.getAuthentication() == null) {
+                apiLog.setAuthentication(new HashMap<>());
+            }
+            apiLog.getAuthentication().putAll(authentication);
+        }
+        return this;
+    }
+
+    @Override
+    public HttpApiLogBuilder authentication(String key, Object value) {
+        if (apiLog.getAuthentication() == null) {
+            apiLog.setAuthentication(new HashMap<>());
+        }
+        apiLog.getAuthentication().put(key, value);
         return this;
     }
 
@@ -217,10 +270,8 @@ public class DefaultHttpApiLogBuilder implements HttpApiLogBuilder {
     }
 
     @Override
-    public HttpApiLog build() {
-        long elapsedTime = System.nanoTime() - apiLog.getRequestTime();
-        elapsedTime(elapsedTime);
-        elapsedTimeFormat(Duration.ofNanos(elapsedTime).toString());
+    public HttpApiLog build(Consumer<HttpApiLog> consumer) {
+        consumer.accept(apiLog);
         return apiLog;
     }
 }

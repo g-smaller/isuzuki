@@ -1,16 +1,15 @@
 package com.isuzuki.http.apilog;
 
+import com.isuzuki.core.logs.http.HttpApiCookie;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 
+import java.net.HttpCookie;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class HttpApiLogUtils {
 
@@ -44,16 +43,16 @@ public class HttpApiLogUtils {
         return headerMap;
     }
 
-    public static Map<String, Object> getCookies(HttpServletRequest request) {
+    public static List<HttpApiCookie> getCookies(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length > 0) {
-            Map<String, Object> cookiesMap = new HashMap<>(cookies.length,1.0F);
+            List<HttpApiCookie> cookieList = new ArrayList<>(cookies.length);
             for (Cookie cookie : cookies) {
-                cookiesMap.put(cookie.getName(), cookie.getValue());
+                cookieList.add(HttpApiCookie.cookie(cookie.getName(), cookie.getValue()).attributes(cookie.getAttributes()));
             }
-            return cookiesMap;
+            return cookieList;
         }
-        return Collections.EMPTY_MAP;
+        return Collections.EMPTY_LIST;
     }
 
     public static String getHeader(HttpServletRequest request, String key) {

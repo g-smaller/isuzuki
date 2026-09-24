@@ -1,5 +1,6 @@
 package com.isuzuki.http.apilog;
 
+import com.isuzuki.core.logs.http.HttpApiLogBuilder;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

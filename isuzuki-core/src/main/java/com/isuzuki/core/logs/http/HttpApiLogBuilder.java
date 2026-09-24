@@ -1,8 +1,17 @@
-package com.isuzuki.http.apilog;
+package com.isuzuki.core.logs.http;
 
+import java.time.Duration;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public interface HttpApiLogBuilder {
+
+    String ATTRIBUTE = HttpApiLogBuilder.class.getName();
+
+    static HttpApiLogBuilder builder() {
+        return DefaultHttpApiLogBuilder.create().requestTime(System.nanoTime());
+    }
 
     String getTraceId();
 
@@ -30,15 +39,21 @@ public interface HttpApiLogBuilder {
 
     HttpApiLogBuilder contentLength(int contentLength);
 
+    HttpApiLogBuilder contentLength(String contentLength);
+
     HttpApiLogBuilder contentType(String contentType);
 
     HttpApiLogBuilder referer(String referer);
 
     HttpApiLogBuilder ua(String ua);
 
-    HttpApiLogBuilder cookies(Map<String, Object> cookies);
+    HttpApiLogBuilder cookies(List<HttpApiCookie> cookies);
+
+    HttpApiLogBuilder cookies(HttpApiCookie cookie);
 
     HttpApiLogBuilder headers(Map<String, Object> headers);
+
+    HttpApiLogBuilder headers(String key, String value);
 
     HttpApiLogBuilder annotations(Map<String, Object> annotations);
 
@@ -52,7 +67,9 @@ public interface HttpApiLogBuilder {
 
     HttpApiLogBuilder addExtra(String key, Object value);
 
-    HttpApiLogBuilder authenticator(HttpAuthenticator authenticator);
+    HttpApiLogBuilder authentication(Map<String, Object> authentication);
+
+    HttpApiLogBuilder authentication(String key, Object value);
 
     HttpApiLogBuilder statusCode(Integer statusCode);
 
@@ -62,5 +79,13 @@ public interface HttpApiLogBuilder {
 
     HttpApiLogBuilder elapsedTimeFormat(String elapsedTimeFormat);
 
-    HttpApiLog build();
+    default HttpApiLog build() {
+        return build((apiLog) -> {
+            long elapsedTime = System.nanoTime() - apiLog.getRequestTime();
+            elapsedTime(elapsedTime);
+            elapsedTimeFormat(Duration.ofNanos(elapsedTime).toString());
+        });
+    }
+
+    HttpApiLog build(Consumer<HttpApiLog> consumer);
 }

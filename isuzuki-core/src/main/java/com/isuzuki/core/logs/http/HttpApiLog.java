@@ -1,5 +1,6 @@
-package com.isuzuki.http.apilog;
+package com.isuzuki.core.logs.http;
 
+import java.util.List;
 import java.util.Map;
 
 public interface HttpApiLog {
@@ -33,7 +34,7 @@ public interface HttpApiLog {
 
     String getUa();
 
-    Map<String, Object> getCookies();
+    List<HttpApiCookie> getCookies();
 
     Map<String, Object> getHeaders();
 
@@ -43,7 +44,7 @@ public interface HttpApiLog {
 
     Map<String, Object> getExtra();
 
-    HttpAuthenticator getAuthenticator();
+    Map<String, Object> getAuthentication();
 
     Integer getStatusCode();
 

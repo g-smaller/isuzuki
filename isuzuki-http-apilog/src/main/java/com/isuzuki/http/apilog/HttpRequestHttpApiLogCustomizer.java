@@ -1,5 +1,6 @@
 package com.isuzuki.http.apilog;
 
+import com.isuzuki.core.logs.http.HttpApiLogBuilder;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
