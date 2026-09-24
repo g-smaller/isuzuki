@@ -23,6 +23,7 @@
         <module>isuzuki-web</module>
         <module>isuzuki-core</module>
         <module>isuzuki-http-apilog</module>
+        <module>isuzuki-gateway-web</module>
     </modules>
 
     <properties>
