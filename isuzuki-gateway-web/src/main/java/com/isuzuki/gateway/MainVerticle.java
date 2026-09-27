@@ -16,11 +16,14 @@ import java.util.Map;
 /**
  * https://silentbalanceyh.gitbooks.io/vert-x/content/chapter01/01-1-functional-programming.html
  * https://vertx.java.net.cn/docs/vertx-core/java/
+ * https://www.yuque.com/jiezizhu/r2mo
+ * http://www.zerows.io/
  */
 public class MainVerticle extends VerticleBase {
 
     @Override
     public Future<?> start() {
+
         HttpServer httpServer = vertx.createHttpServer();
         Router mainRouter = Router.router(vertx);
         Route mainRoute = mainRouter.errorHandler(400, (ctx) -> {

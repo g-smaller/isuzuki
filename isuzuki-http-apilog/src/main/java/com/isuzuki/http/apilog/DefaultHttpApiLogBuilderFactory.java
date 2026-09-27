@@ -13,7 +13,7 @@ public class DefaultHttpApiLogBuilderFactory implements HttpApiLogBuilderFactory
 
     @Override
     public HttpApiLogBuilder create(HttpServletRequest request) {
-        return DefaultHttpApiLogBuilder.builder()
+        return HttpApiLogBuilder.builder()
                 .requestTime(System.nanoTime())
                 .requestTimeFormat(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss:SSS"));
 
