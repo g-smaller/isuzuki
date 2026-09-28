@@ -1,6 +1,6 @@
 package com.isuzuki.http.apilog;
 
-import com.isuzuki.core.logs.http.HttpApiLogBuilder;
+import com.isuzuki.core.http.logs.HttpApiLogBuilder;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanContext;
 import jakarta.servlet.http.HttpServletRequest;

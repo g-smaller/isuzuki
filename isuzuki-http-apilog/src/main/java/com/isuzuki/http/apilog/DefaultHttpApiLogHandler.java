@@ -1,7 +1,7 @@
 package com.isuzuki.http.apilog;
 
-import com.isuzuki.core.logs.http.HttpApiLog;
-import com.isuzuki.core.logs.http.HttpApiLogBuilder;
+import com.isuzuki.core.http.logs.HttpApiLog;
+import com.isuzuki.core.http.logs.HttpApiLogBuilder;
 import com.isuzuki.utils.Jsons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

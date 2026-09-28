@@ -1,9 +1,12 @@
-package com.isuzuki.core.logs.http;
+package com.isuzuki.core.http.logs;
 
 import java.util.List;
 import java.util.Map;
 
 public interface HttpApiLog {
+
+    String ATTRIBUTE = HttpApiLogBuilder.class.getName();
+
     String getTraceId();
 
     Long getRequestTime();

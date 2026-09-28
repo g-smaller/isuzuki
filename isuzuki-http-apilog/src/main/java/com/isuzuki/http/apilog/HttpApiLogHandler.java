@@ -1,6 +1,6 @@
 package com.isuzuki.http.apilog;
 
-import com.isuzuki.core.logs.http.HttpApiLogBuilder;
+import com.isuzuki.core.http.logs.HttpApiLogBuilder;
 
 public interface HttpApiLogHandler {
 

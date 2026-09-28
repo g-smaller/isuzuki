@@ -13,7 +13,7 @@ public class Application {
         Vertx.builder()
                 .with(vertxOptions)
                 .build()
-                .deployVerticle(new MainVerticle(),  new DeploymentOptions())
+                .deployVerticle(new HttpServerVerticle(),  new DeploymentOptions())
                 .onComplete(r -> {
                     if (r.succeeded()) {
                         System.out.println("AsyncResult = OK!");

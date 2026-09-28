@@ -1,4 +1,4 @@
-package com.isuzuki.core.logs.http;
+package com.isuzuki.core.http.logs;
 
 import java.util.HashMap;
 import java.util.Map;

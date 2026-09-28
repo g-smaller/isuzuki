@@ -1,12 +1,11 @@
 package com.isuzuki.http.apilog;
 
-import com.isuzuki.core.logs.http.HttpApiCookie;
+import com.isuzuki.core.http.logs.HttpApiCookie;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 
-import java.net.HttpCookie;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;

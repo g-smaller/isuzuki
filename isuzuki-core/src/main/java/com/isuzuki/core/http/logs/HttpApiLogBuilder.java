@@ -1,4 +1,4 @@
-package com.isuzuki.core.logs.http;
+package com.isuzuki.core.http.logs;
 
 import java.time.Duration;
 import java.util.List;
@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public interface HttpApiLogBuilder {
-
-    String ATTRIBUTE = HttpApiLogBuilder.class.getName();
 
     static HttpApiLogBuilder builder() {
         return DefaultHttpApiLogBuilder.create().requestTime(System.nanoTime());
