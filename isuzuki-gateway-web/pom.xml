@@ -56,10 +56,10 @@
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web</artifactId>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web-openapi-router</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web-client</artifactId>
@@ -72,10 +72,10 @@
             <groupId>io.vertx</groupId>
             <artifactId>vertx-codegen</artifactId>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web-proxy</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-opentelemetry</artifactId>
@@ -88,14 +88,14 @@
             <groupId>io.vertx</groupId>
             <artifactId>vertx-micrometer-metrics</artifactId>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-uri-template</artifactId>
         </dependency>
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-hazelcast</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-junit5</artifactId>
