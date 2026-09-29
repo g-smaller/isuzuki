@@ -73,15 +73,20 @@ public interface HttpApiLogBuilder {
 
     HttpApiLogBuilder response(Object response);
 
-    HttpApiLogBuilder elapsedTime(Long elapsedTime);
+    HttpApiLogBuilder durationMillis(Long durationMillis);
 
-    HttpApiLogBuilder elapsedTimeFormat(String elapsedTimeFormat);
+    HttpApiLogBuilder durationNano(Long durationNano);
+
+    HttpApiLogBuilder durationNanoFormat(String durationNanoFormat);
 
     default HttpApiLog build() {
         return build((apiLog) -> {
-            long elapsedTime = System.nanoTime() - apiLog.getRequestTime();
-            elapsedTime(elapsedTime);
-            elapsedTimeFormat(Duration.ofNanos(elapsedTime).toString());
+            long nano = System.nanoTime() - apiLog.getRequestTime();
+            Duration duration = Duration.ofNanos(nano);
+
+            durationNano(nano);
+            durationNanoFormat(duration.toString());
+            durationMillis(duration.toMillis());
         });
     }
 

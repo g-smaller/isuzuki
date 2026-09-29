@@ -27,8 +27,9 @@ public class DefaultHttpApiLog implements HttpApiLog {
     private Map<String, Object> authentication;
     private Integer statusCode;
     private Object response;
-    private Long elapsedTime;
-    private String elapsedTimeFormat;
+    private Long durationMillis;
+    private Long durationNano;
+    private String durationNanoFormat;
 
     @Override
     public String getTraceId() {
@@ -146,13 +147,18 @@ public class DefaultHttpApiLog implements HttpApiLog {
     }
 
     @Override
-    public Long getElapsedTime() {
-        return elapsedTime;
+    public Long getDurationMillis() {
+        return durationMillis;
     }
 
     @Override
-    public String getElapsedTimeFormat() {
-        return  elapsedTimeFormat;
+    public Long getDurationNano() {
+        return durationNano;
+    }
+
+    @Override
+    public String getDurationNanoFormat() {
+        return durationNanoFormat;
     }
 
     public void setTraceId(String traceId) {
@@ -247,11 +253,15 @@ public class DefaultHttpApiLog implements HttpApiLog {
         this.response = response;
     }
 
-    public void setElapsedTime(Long elapsedTime) {
-        this.elapsedTime = elapsedTime;
+    public void setDurationMillis(Long durationMillis) {
+        this.durationMillis = durationMillis;
     }
 
-    public void setElapsedTimeFormat(String elapsedTimeFormat) {
-        this.elapsedTimeFormat = elapsedTimeFormat;
+    public void setDurationNano(Long durationNano) {
+        this.durationNano = durationNano;
+    }
+
+    public void setDurationNanoFormat(String durationNanoFormat) {
+        this.durationNanoFormat = durationNanoFormat;
     }
 }

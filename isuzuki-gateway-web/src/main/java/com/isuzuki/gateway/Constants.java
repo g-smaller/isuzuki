@@ -3,8 +3,9 @@ package com.isuzuki.gateway;
 public interface Constants {
 
     interface Http {
+        String SERVER_ADDRESS = "http.server-address";
         String DOMAIN = "http.domain";
-        String URL = "http.url";
+        String URI = "http.uri";
         String METHOD = "http.method";
         String PATH = "http.path";
         String BODY = "http.body";
@@ -13,6 +14,8 @@ public interface Constants {
         String CONTENT_LENGTH = "http.content-length";
         String HOST = "http.host";
         String SCHEME = "http.scheme";
+        String REQUEST_TIMEOUT = "http.request-timeout";
+        String RESPONSE_TIMEOUT = "http.response-timeout";
     }
 
     interface Service {

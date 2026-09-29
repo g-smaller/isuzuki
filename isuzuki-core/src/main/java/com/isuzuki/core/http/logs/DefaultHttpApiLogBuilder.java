@@ -257,14 +257,20 @@ public class DefaultHttpApiLogBuilder implements HttpApiLogBuilder {
     }
 
     @Override
-    public HttpApiLogBuilder elapsedTime(Long elapsedTime) {
-        apiLog.setElapsedTime(elapsedTime);
+    public HttpApiLogBuilder durationMillis(Long durationMillis) {
+        apiLog.setDurationMillis(durationMillis);
         return this;
     }
 
     @Override
-    public HttpApiLogBuilder elapsedTimeFormat(String elapsedTimeFormat) {
-        apiLog.setElapsedTimeFormat(elapsedTimeFormat);
+    public HttpApiLogBuilder durationNano(Long durationNano) {
+        apiLog.setDurationNano(durationNano);
+        return this;
+    }
+
+    @Override
+    public HttpApiLogBuilder durationNanoFormat(String durationNanoFormat) {
+        apiLog.setDurationNanoFormat(durationNanoFormat);
         return this;
     }
 

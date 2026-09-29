@@ -5,6 +5,8 @@ import java.util.Map;
 
 public interface HttpApiLog {
 
+    String LOGGER_NAME = HttpApiLog.class.getName();
+
     String ATTRIBUTE = HttpApiLogBuilder.class.getName();
 
     String getTraceId();
@@ -53,8 +55,10 @@ public interface HttpApiLog {
 
     Object getResponse();
 
-    Long getElapsedTime();
+    Long getDurationMillis();
 
-    String getElapsedTimeFormat();
+    Long getDurationNano();
+
+    String getDurationNanoFormat();
 }
 

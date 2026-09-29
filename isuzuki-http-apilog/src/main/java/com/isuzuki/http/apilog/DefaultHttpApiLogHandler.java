@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public class DefaultHttpApiLogHandler implements HttpApiLogHandler {
 
-    private Logger logger = LoggerFactory.getLogger(HttpApiLog.class);
+    private Logger logger = LoggerFactory.getLogger(HttpApiLog.LOGGER_NAME);
 
     @Override
     public void handle(HttpApiLogBuilder builder, Throwable throwable) {

@@ -1,12 +1,17 @@
-package com.isuzuki.gateway.handle;
+package com.isuzuki.gateway.plugin;
 
+import com.alibaba.fastjson2.JSON;
 import com.isuzuki.core.http.logs.HttpApiCookie;
 import com.isuzuki.core.http.logs.HttpApiLog;
 import com.isuzuki.core.http.logs.HttpApiLogBuilder;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.ext.web.RoutingContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class HttpApiLogHandler implements PriorityHandler {
+public class HttpApiLogPluginHandler implements PriorityPluginHandler<RoutingContext> {
+
+    private final static Logger logger = LoggerFactory.getLogger(HttpApiLog.LOGGER_NAME);
 
     @Override
     public void handle(RoutingContext ctx) {
@@ -38,24 +43,44 @@ public class HttpApiLogHandler implements PriorityHandler {
         });
         ctx.put(HttpApiLog.ATTRIBUTE, builder);
         ctx.next();
+        end(ctx);
     }
 
     public static void fail(RoutingContext ctx) {
         if (ctx.failed()) {
-            Object o = ctx.get(HttpApiLog.ATTRIBUTE);
-            if (o == null) {
+            HttpApiLogBuilder builder = getBuilder(ctx);
+            if (builder == null) {
                 return;
             }
-            if (o instanceof HttpApiLogBuilder) {
-                ((HttpApiLogBuilder)o)
-                        .statusCode(ctx.statusCode())
-                        .addExtra("exception.message", ctx.failure().getMessage());
-            }
+            builder
+                    .statusCode(ctx.statusCode())
+                    .addExtra("exception.message", ctx.failure() == null ? "" : ctx.failure().getMessage());
         }
+        end(ctx);
+    }
+
+    private static void end(RoutingContext ctx) {
+        HttpApiLogBuilder builder = getBuilder(ctx);
+        if (builder == null) {
+            return;
+        }
+        HttpApiLog apiLog = builder.build();
+        logger.info("{}", JSON.toJSONString(apiLog));
+    }
+
+    private static HttpApiLogBuilder getBuilder(RoutingContext ctx) {
+        Object o = ctx.get(HttpApiLog.ATTRIBUTE);
+        if (o == null) {
+            return null;
+        }
+        if (o instanceof HttpApiLogBuilder) {
+            return (HttpApiLogBuilder) o;
+        }
+        return null;
     }
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE;
+        return PriorityPluginHandler.O_1;
     }
 }

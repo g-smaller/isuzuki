@@ -1,13 +1,15 @@
 package com.isuzuki.gateway;
 
-import com.isuzuki.gateway.handle.HttpApiLogHandler;
+import com.isuzuki.gateway.handle.HandlerChains;
+import com.isuzuki.gateway.plugin.HttpApiLogPluginHandler;
+import com.isuzuki.gateway.plugin.ServiceDiscoveryPluginHandler;
+import com.isuzuki.gateway.plugin.URLPluginHandler;
+import com.isuzuki.gateway.plugin.WebClientPluginHandler;
 import io.vertx.core.Future;
 import io.vertx.core.VerticleBase;
-import io.vertx.core.http.HttpServer;
-import io.vertx.ext.web.Route;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.openapi.router.RouterBuilder;
 
 import java.util.Map;
 
@@ -22,29 +24,30 @@ public class HttpServerVerticle extends VerticleBase {
     @Override
     public Future<?> start() {
 
-        HttpServer httpServer = vertx.createHttpServer();
-        Router mainRouter = Router.router(vertx);
-        Route mainRoute = mainRouter.errorHandler(400, (ctx) -> {
-                    ctx.json(Map.of("succeed", "false"));
-                })
-                .route("/**")
-                .handler(new HttpApiLogHandler())
-                .handler(BodyHandler.create(false))
-                .failureHandler(HttpApiLogHandler::fail);
-
         Router apiRouter = Router.router(vertx);
-        apiRouter.route("/api")
-                .setName("")
+        apiRouter.route("/ai/api/*")
+                .setName("ai.api.sets")
                 .enable()
-                .putMetadata(Constants.Route.REQUEST_TIMEOUT, "3000")
-                .putMetadata(Constants.Route.RESPONSE_TIMEOUT, "3000")
-                .handler(ctx -> {
-                    ctx.json(Map.of("succeed", "true"));
-                });
+                .putMetadata(Constants.Route.REQUEST_TIMEOUT, "2000")
+                .putMetadata(Constants.Route.RESPONSE_TIMEOUT, "2000")
+                .handler(HandlerChains.create()
+                        .add(new HttpApiLogPluginHandler())
+                        .add(new URLPluginHandler())
+                        .add(new ServiceDiscoveryPluginHandler())
+                        .add(new WebClientPluginHandler(WebClient.wrap(vertx.httpClientBuilder().build())))
+                );
 
-        mainRoute.subRouter(apiRouter);
+        Router mainRouter = Router.router(vertx);
+        mainRouter.errorHandler(400, (ctx) -> {
+                    ctx.json(Map.of("success", "false", "code", "400", "message", "error"));
+                })
+                .route("/*")
+                .handler(BodyHandler.create(false))
+                .failureHandler(HttpApiLogPluginHandler::fail)
+                .subRouter(apiRouter);
 
-        return httpServer
+
+        return vertx.createHttpServer()
                 .requestHandler(mainRouter)
                 .exceptionHandler((t) -> {
                     t.printStackTrace();
@@ -54,7 +57,7 @@ public class HttpServerVerticle extends VerticleBase {
                 })
                 .listen(8080)
                 .onSuccess((http) -> {
-                    System.out.println("HTTP server started on port " + http.actualPort());
+                    System.out.println("Server listening on http://0.0.0.0:" + http.actualPort());
                 });
     }
 }

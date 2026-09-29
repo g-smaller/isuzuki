@@ -4,7 +4,7 @@ import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 
-public class Application {
+public class VertxApplication {
 
     public static void main(String[] args) {
 
@@ -16,13 +16,10 @@ public class Application {
                 .deployVerticle(new HttpServerVerticle(),  new DeploymentOptions())
                 .onComplete(r -> {
                     if (r.succeeded()) {
-                        System.out.println("AsyncResult = OK!");
+                        System.out.println("Vert.x Application Start Successful!");
                     }else {
-                        System.out.println("AsyncResult = Failure!");
+                        System.out.println("Vert.x Application Start Failure!");
                     }
-                })
-                .onSuccess((state) ->{
-                    System.out.println("Success = " + state);
                 }).onFailure(e -> {
                     System.out.println("Failure = " + e.getMessage());
                     e.printStackTrace();

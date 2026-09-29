@@ -1,5 +1,7 @@
 package com.isuzuki.gateway.handle;
 
+import com.isuzuki.gateway.plugin.Ordered;
+import com.isuzuki.gateway.plugin.PriorityPluginHandler;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
 
@@ -8,11 +10,30 @@ import java.util.List;
 
 public class HandlerChains implements Handler<RoutingContext> {
 
+    public static HandlerChains create() {
+        return new HandlerChains();
+    }
+
+    public HandlerChains add(Handler<RoutingContext> handler) {
+        add(new HandlerDecorator(handler, Ordered.LOWEST_PRECEDENCE));
+        return this;
+    }
+
+    public HandlerChains add(PriorityPluginHandler<RoutingContext> handler) {
+        add(new HandlerDecorator(handler, handler.getOrder()));
+        return this;
+    }
+
+    public HandlerChains add(HandlerDecorator handler) {
+        handlers.add(handler);
+        return this;
+    }
+
     private List<HandlerDecorator> handlers = new ArrayList<>();
 
     @Override
     public void handle(RoutingContext event) {
-        new DefaultFilterChain(handlers).doNext(event);
+        new DefaultFilterChain(handlers).doChain(event);
     }
 
     private class DefaultFilterChain implements HandlerChain {
@@ -25,7 +46,7 @@ public class HandlerChains implements Handler<RoutingContext> {
         }
 
         @Override
-        public void doNext(RoutingContext event) {
+        public void doChain(RoutingContext event) {
             if (handlers == null || handlers.isEmpty()) {
                 return;
             }

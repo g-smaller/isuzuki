@@ -1,4 +1,4 @@
-package com.isuzuki.gateway.handle;
+package com.isuzuki.gateway.plugin;
 
 public interface Ordered {
 

@@ -1,8 +1,11 @@
-package com.isuzuki.gateway.handle;
+package com.isuzuki.gateway.plugin;
 
+import io.vertx.core.http.HttpClient;
 import io.vertx.ext.web.RoutingContext;
 
-public class HttpClientHandler implements PriorityHandler {
+public class HttpClientPluginHandler implements PriorityPluginHandler<RoutingContext> {
+
+    private HttpClient httpClient;
 
     @Override
     public void handle(RoutingContext event) {

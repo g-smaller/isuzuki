@@ -4,6 +4,6 @@ import io.vertx.ext.web.RoutingContext;
 
 public interface HandlerChain {
 
-    void doNext(RoutingContext event);
+    void doChain(RoutingContext event);
 
 }
