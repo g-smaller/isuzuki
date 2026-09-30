@@ -55,7 +55,7 @@ public class HttpServerVerticle extends VerticleBase {
                 ).handler(new WebClientHandler(WebClient.wrap(vertx.httpClientBuilder().build())));
 
         Router mainRouter = Router.router(vertx);
-        mainRouter.route("/bcms/*")
+        mainRouter.route("/v1/*")
                 .subRouter(apiRouter);
 
 

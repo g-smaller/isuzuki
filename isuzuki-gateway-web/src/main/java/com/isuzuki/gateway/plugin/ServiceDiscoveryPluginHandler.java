@@ -12,6 +12,6 @@ public class ServiceDiscoveryPluginHandler implements PriorityPluginHandler<Rout
 
     @Override
     public void handle(RoutingContext event) {
-        event.put(Constants.Http.SERVER_ADDRESS, SocketAddress.inetSocketAddress(9999, "192.168.18.185"));
+        event.put(Constants.Http.SERVER_ADDRESS, SocketAddress.inetSocketAddress(9991, "192.168.1.185"));
     }
 }
