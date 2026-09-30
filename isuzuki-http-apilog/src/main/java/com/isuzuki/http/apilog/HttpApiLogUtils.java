@@ -1,5 +1,6 @@
 package com.isuzuki.http.apilog;
 
+import com.isuzuki.core.InetAddressUtils;
 import com.isuzuki.core.http.logs.HttpApiCookie;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -79,20 +80,10 @@ public class HttpApiLogUtils {
     }
 
     public static String getLocalHostName() {
-        try {
-            return InetAddress.getLocalHost().getHostName();
-        } catch (UnknownHostException e) {
-
-        }
-        return "unknown host name";
+        return InetAddressUtils.getLocalHostName();
     }
 
     public static String getLocalIP() {
-        try {
-            return InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-
-        }
-        return "unknown host name";
+        return InetAddressUtils.getLocalIP();
     }
 }

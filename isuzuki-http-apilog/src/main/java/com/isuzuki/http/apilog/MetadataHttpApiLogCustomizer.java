@@ -1,6 +1,7 @@
 package com.isuzuki.http.apilog;
 
 import com.isuzuki.core.http.logs.HttpApiLogBuilder;
+import com.isuzuki.core.http.logs.HttpApiLogFields;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 

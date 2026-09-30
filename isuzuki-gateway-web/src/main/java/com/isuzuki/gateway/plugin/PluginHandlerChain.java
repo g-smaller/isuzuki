@@ -1,8 +1,8 @@
-package com.isuzuki.gateway.handle;
+package com.isuzuki.gateway.plugin;
 
 import io.vertx.ext.web.RoutingContext;
 
-public interface HandlerChain {
+public interface PluginHandlerChain {
 
     void doChain(RoutingContext event);
 

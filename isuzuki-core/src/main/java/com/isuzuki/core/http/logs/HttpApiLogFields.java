@@ -1,4 +1,4 @@
-package com.isuzuki.http.apilog;
+package com.isuzuki.core.http.logs;
 
 public interface HttpApiLogFields {
 
@@ -28,7 +28,8 @@ public interface HttpApiLogFields {
     }
 
     interface Extra {
-
+        String OTEL_TRACE_ID = "otel.trace_id";
+        String OTEL_SPAN_ID = "otel.span_id";
     }
 
 }

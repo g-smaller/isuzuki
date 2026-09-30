@@ -1,15 +1,17 @@
 package com.isuzuki.gateway;
 
-import com.isuzuki.gateway.handle.HandlerChains;
-import com.isuzuki.gateway.plugin.HttpApiLogPluginHandler;
+import com.isuzuki.gateway.plugin.PluginHandlerChains;
+import com.isuzuki.gateway.handler.HttpApiLogHandler;
 import com.isuzuki.gateway.plugin.ServiceDiscoveryPluginHandler;
 import com.isuzuki.gateway.plugin.URLPluginHandler;
-import com.isuzuki.gateway.plugin.WebClientPluginHandler;
+import com.isuzuki.gateway.handler.WebClientHandler;
 import io.vertx.core.Future;
 import io.vertx.core.VerticleBase;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.handler.BodyHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -21,29 +23,39 @@ import java.util.Map;
  */
 public class HttpServerVerticle extends VerticleBase {
 
+    private static final Logger log = LoggerFactory.getLogger(HttpServerVerticle.class);
+
     @Override
     public Future<?> start() {
 
         Router apiRouter = Router.router(vertx);
-        apiRouter.route("/ai/api/*")
+        apiRouter.errorHandler(400, (ctx) -> {
+                    log.error("400 Bad Request", ctx.failure());
+                    ctx.json(Map.of("success", "false", "code", "400", "message", "Bad Request"));
+                })
+                .errorHandler(404, (ctx) -> {
+                    log.error("404 Not Found, {}", ctx.currentRoute().toString(), ctx.failure());
+                    ctx.json(Map.of("success", "false", "code", "404", "message", "Not Found"));
+                })
+                .errorHandler(500, (ctx) -> {
+                    log.error("500 Internal Server Error", ctx.failure());
+                    ctx.json(Map.of("success", "false", "code", "500", "message", "Internal Server Error"));
+                })
+                .route("/api/disease/*")
                 .setName("ai.api.sets")
                 .enable()
                 .putMetadata(Constants.Route.REQUEST_TIMEOUT, "2000")
                 .putMetadata(Constants.Route.RESPONSE_TIMEOUT, "2000")
-                .handler(HandlerChains.create()
-                        .add(new HttpApiLogPluginHandler())
+                .failureHandler(HttpApiLogHandler::fail)
+                .handler(BodyHandler.create(false))
+                .handler(new HttpApiLogHandler())
+                .handler(PluginHandlerChains.create()
                         .add(new URLPluginHandler())
                         .add(new ServiceDiscoveryPluginHandler())
-                        .add(new WebClientPluginHandler(WebClient.wrap(vertx.httpClientBuilder().build())))
-                );
+                ).handler(new WebClientHandler(WebClient.wrap(vertx.httpClientBuilder().build())));
 
         Router mainRouter = Router.router(vertx);
-        mainRouter.errorHandler(400, (ctx) -> {
-                    ctx.json(Map.of("success", "false", "code", "400", "message", "error"));
-                })
-                .route("/*")
-                .handler(BodyHandler.create(false))
-                .failureHandler(HttpApiLogPluginHandler::fail)
+        mainRouter.route("/bcms/*")
                 .subRouter(apiRouter);
 
 

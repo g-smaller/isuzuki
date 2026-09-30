@@ -13,4 +13,7 @@ public interface PriorityPluginHandler<E> extends Handler<E>, Ordered {
     int O_6 = Ordered.HIGHEST_PRECEDENCE + 6;
     int O_7 = Ordered.HIGHEST_PRECEDENCE + 7;
 
+    default void afterHandler(E event) {
+
+    }
 }

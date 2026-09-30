@@ -16,6 +16,7 @@ public interface Constants {
         String SCHEME = "http.scheme";
         String REQUEST_TIMEOUT = "http.request-timeout";
         String RESPONSE_TIMEOUT = "http.response-timeout";
+        String RESPONSE_BODY = "http.response-body";
     }
 
     interface Service {

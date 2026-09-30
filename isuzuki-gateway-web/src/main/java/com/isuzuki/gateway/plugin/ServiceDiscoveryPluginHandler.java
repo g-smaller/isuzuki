@@ -12,7 +12,6 @@ public class ServiceDiscoveryPluginHandler implements PriorityPluginHandler<Rout
 
     @Override
     public void handle(RoutingContext event) {
-        event.put(Constants.Http.SERVER_ADDRESS, SocketAddress.inetSocketAddress(443,"https://mcptest.cmvalue.com"));
-        event.next();
+        event.put(Constants.Http.SERVER_ADDRESS, SocketAddress.inetSocketAddress(9999, "192.168.18.185"));
     }
 }

@@ -13,6 +13,5 @@ public class URLPluginHandler implements PriorityPluginHandler<RoutingContext> {
     public void handle(RoutingContext event) {
         event.put(Constants.Http.URI, event.request().uri());
         event.put(Constants.Http.METHOD, event.request().method().name());
-        event.next();
     }
 }
