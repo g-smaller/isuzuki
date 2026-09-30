@@ -9,6 +9,7 @@ import io.vertx.core.Future;
 import io.vertx.core.VerticleBase;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.client.WebClient;
+import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.ext.web.handler.BodyHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,10 @@ public class HttpServerVerticle extends VerticleBase {
                     log.error("500 Internal Server Error", ctx.failure());
                     ctx.json(Map.of("success", "false", "code", "500", "message", "Internal Server Error"));
                 })
+                .errorHandler(504, (ctx) -> {
+                    log.error("504 Gateway Timeout", ctx.failure());
+                    ctx.json(Map.of("success", "false", "code", "504", "message", "Gateway Timeout"));
+                })
                 .route("/api/disease/*")
                 .setName("ai.api.sets")
                 .enable()
@@ -52,7 +57,12 @@ public class HttpServerVerticle extends VerticleBase {
                 .handler(PluginHandlerChains.create()
                         .add(new URLPluginHandler())
                         .add(new ServiceDiscoveryPluginHandler())
-                ).handler(new WebClientHandler(WebClient.wrap(vertx.httpClientBuilder().build())));
+                ).handler(new WebClientHandler(WebClient.wrap(vertx.httpClientBuilder().build(), new WebClientOptions()
+                        .setConnectTimeout(3000)
+                        .setIdleTimeout(60)
+                        .setKeepAliveTimeout(30)
+                        .setMaxHeaderSize(50)))
+                );
 
         Router mainRouter = Router.router(vertx);
         mainRouter.route("/v1/*")

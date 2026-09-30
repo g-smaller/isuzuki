@@ -63,7 +63,7 @@ public class WebClientHandler implements Handler<RoutingContext> {
                 .timeout(getTimeout(event))
                 .putHeaders(requestHeaderFilter(event.request().headers()))
                 .sendBuffer(event.body().buffer())
-                .onComplete(clientResponse -> {
+                .onSuccess(clientResponse -> {
 
                     MultiMap responseHeaders = responseHeaderFilter(clientResponse.headers());
                     if (responseHeaders != null) {
@@ -84,7 +84,8 @@ public class WebClientHandler implements Handler<RoutingContext> {
                             failure(event, throwable);
                         });
                     }
-                }, throwable -> {
+                })
+                .onFailure(throwable -> {
                     logger.error("WebClient Error!", throwable);
                     failure(event, throwable);
                 });
